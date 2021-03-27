@@ -1,5 +1,5 @@
 import random
-from functions import gen_card
+from Functions import gen_card
 
 
 class Card:
