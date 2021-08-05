@@ -10,7 +10,24 @@ class Card:
         self.is_keg = False
         self.comp_cross_out_nb = False
 
-    # печатаем карточку игрока
+    # простой вывод карточки на печать
+    def __str__(self):
+        return f'{self.card}'
+
+    # опробование различных магических методов, длина карточки
+    def __len__(self):
+        return len(self.card)
+
+    # опробование различных магических методов, сравнение двух карточек
+    def __eq__(self, other):
+        return self.card == other.card
+
+    # опробование различных магических методов, сравнение сумм на двух карточках
+    # если True, то на первой больше
+    def __gt__(self, other):
+        return self.calc_sum() > other.calc_sum()
+
+    # печатаем карточку игрока (с именем игрока, красивый вывод)
     def print_card(self):
         print('-' * 9, f"{self.name}", '-' * 8)
         print(self.card.to_string(index=False, header=False))
@@ -39,6 +56,10 @@ class Bag:
         self.bag_numbers = random.sample(range(1, 91), k=90)
         self.new_keg = None
 
+    # для печати имеющихся номеров бочонков в мешке
+    def __str__(self):
+        return f'{self.bag_numbers}'
+
     # генерируем новый бочонок из мешка
     @property
     def gen_new_keg(self):
@@ -52,6 +73,18 @@ class Bag:
     # количество бочонков в мешке
     def __len__(self):
         return len(self.bag_numbers)
+
+    # опробование различных магических методов, сравнение кол-ва бочонков
+    def __lt__(self, other):
+        return len(self.bag_numbers) < len(other.bag_numbers)
+
+    # опробование различных магических методов, сравнение кол-ва бочонков
+    def __ge__(self, other):
+        return len(self.bag_numbers) >= len(other.bag_numbers)
+
+    # опробование различных магических методов, сравнение кол-ва бочонков
+    def __eq__(self, other):
+        return len(self.bag_numbers) == len(other.bag_numbers)
 
 
 class Player:
@@ -72,6 +105,10 @@ class Player:
         summa = self.card.calc_sum()
         if summa == 0:
             self.is_winner = True
+
+    # опробование различных магических методов, оба ли пользователя являются игроками
+    def __eq__(self, other):
+        return self.is_player == other.is_player
 
 
 class Computer(Player):
@@ -141,6 +178,12 @@ class Game:
             if isinstance(self.nb_computers, int):
                 return self.nb_computers
 
+    def __getitem__(self, item):
+        return self.players[item]
+
+    def __str__(self):
+        return f'В игре {self.nb_computers} компьютеров и  {self.nb_users} пользователей.'
+
     # генерация списка игроков
     def gen_list_players(self):
         for i in range(self.nb_computers):
@@ -199,11 +242,45 @@ class Game:
 
 
 if __name__ == '__main__':
-    user = User('user1')
-    bag = Bag()
-    new_keg = bag.gen_new_keg
-    bag.update_bag(new_keg)
-    print(f"Бочонок: {new_keg}, (осталось: {len(bag)})")
-    user.card.print_card()
-    user.play_card(new_keg)
-    user.card.print_card()
+    # user = User('user1')
+    # bag = Bag()
+    # new_keg = bag.gen_new_keg
+    # bag.update_bag(new_keg)
+    # print(f"Бочонок: {new_keg}, (осталось: {len(bag)})")
+    # user.card.print_card()
+    # user.play_card(new_keg)
+    # user.card.print_card()
+    #
+    # запуск магических методов
+    greta = Card('Greta')
+    ivan = Card('Ivan')
+    # print(greta.name)
+    # print(greta)
+    # print(ivan.name)
+    # print(ivan)
+    # # greta.print_card()
+    # print(len(greta))
+    # print(len(ivan))
+    # print(greta > ivan)
+    # print(greta == ivan)
+    # bag1 = Bag()
+    # print(bag1)
+    # bag2 = Bag()
+    # print(bag2)
+    # print('Кол-во бочонков в 1-м мешке равно кол-ву во втором' if bag1 == bag2 else 'Ошибка')
+    # print('Ошибка' if bag1 < bag2 else 'Кол-во бочонков в 1-м мешке равно кол-ву во втором')
+    # print('Удалили бочонок из первого мешка и снова сравниваем')
+    # bag1.update_bag(25)
+    # print('Кол-во бочонков в 1-м мешке меньше, чем во втором' if bag1 < bag2 else 'Ошибка')
+    # comp = Computer('Werter')
+    # user = User('Lana')
+    # print(comp)
+    # print(user)
+    # print(comp == user)
+    # comp.is_player = False
+    # print('Werter больше не игрок' if comp != user else 'Ошибка')
+    # game = Game()
+    # game.gen_list_players()
+    # print(game)
+    # for item in game.players:
+    #     print(item)
